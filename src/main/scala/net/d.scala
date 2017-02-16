@@ -4,6 +4,7 @@ import shapeless._
 import shapeless.nat._
 import shapeless.ops.nat.{Mod, Prod, Sum}
 
+// Given 2 HList's, consisting of Nat's entirely, add them together.
 trait SumHList[L, M] {
   type S
 }
@@ -29,8 +30,9 @@ object SumHList {
   }
 }
 
-// Given an HList, provide evidence of the sum of HList
-// multiplied
+// Given an HList of size 3, provide evidence of the sum of HList
+// multiplied by _3 :: _2 :: _1 :: HNil
+// Example: input: _1 :: _2 :: _2 -> output: _3 + _4 + _2 :: HNil
 trait HListProductZipped[L] {
   type Out
 }
@@ -70,15 +72,15 @@ object HListSum {
   }
 }
 
-//trait IsValidInductive[L]
-//object IsValidInductive {
-//
-//  // valid criterion:
-//  // 3*d3 + 2*d2 + 1*d1 mod 11 == 0
-//  def apply[L <: HList](implicit ev: IsValidInductive[L]) = ev
-//
-//  implicit def wholeIsValid[LH <: Nat, L <: HList, MH <: Nat, M <: HList, P <: Nat](
-//   implicit ev: SumZippedProduct.Aux[H, _3, P]
-//            ): IsValidInductive[H :: L] = new IsValidInductive[H :: L] {}
-//
-//}
+trait IsValidInductive[L]
+object IsValidInductive {
+
+  // valid criterion:
+  // 3*d3 + 2*d2 + 1*d1 mod 11 == 0
+  def apply[L <: HList](implicit ev: IsValidInductive[L]) = ev
+
+  implicit def wholeIsValid[LH <: Nat, L <: HList, MH <: Nat, M <: HList, P <: Nat](
+   implicit ev: SumZippedProduct.Aux[H, _3, P]
+            ): IsValidInductive[H :: L] = new IsValidInductive[H :: L] {}
+
+}
