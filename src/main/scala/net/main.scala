@@ -33,12 +33,12 @@ object SumHList {
 // Given an HList of size 3, provide evidence of the sum of HList
 // multiplied by _3 :: _2 :: _1 :: HNil
 // Example: input: _1 :: _2 :: _2 -> output: _3 + _4 + _2 :: HNil
-trait HListProductZipped[L] {
-  type Out
+trait HListProductZipped[L <: HList] {
+  type Out <: HList
 }
 object HListProductZipped {
 
-  type Aux[L, O] = HListProductZipped[L] { type Out = O }
+  type Aux[L <: HList, O <: HList] = HListProductZipped[L] { type Out = O }
 
   def apply[L <: HList](implicit ev: HListProductZipped[L]): ev.type = ev
 
@@ -52,14 +52,14 @@ object HListProductZipped {
     }
 }
 
-trait HListSum[L] {
-  type Out
+trait HListSum[L <: HList] {
+  type Out <: Nat
 }
 object HListSum {
 
-  type Aux[L, O] = HListSum[L] { type Out = O }
+  type Aux[L <: HList, O <: Nat] = HListSum[L] { type Out = O }
 
-  def apply[L <: HList](implicit ev: HListSum[L]): ev.type = ev
+  def apply[L <: HList](implicit ev: HListSum[L]): Aux[L, ev.Out] = ev
 
   implicit def hListSumInductive[H <: Nat, L <: HList, S <: Nat, T <: Nat](
     implicit rest: HListSum.Aux[L, T],
@@ -72,15 +72,19 @@ object HListSum {
   }
 }
 
-trait IsValidInductive[L]
+
+trait IsValidInductive[L <: HList]
 object IsValidInductive {
 
   // valid criterion:
   // 3*d3 + 2*d2 + 1*d1 mod 11 == 0
   def apply[L <: HList](implicit ev: IsValidInductive[L]) = ev
 
-  implicit def wholeIsValid[LH <: Nat, L <: HList, MH <: Nat, M <: HList, P <: Nat](
-   implicit ev: SumZippedProduct.Aux[H, _3, P]
-            ): IsValidInductive[H :: L] = new IsValidInductive[H :: L] {}
+  implicit def wholeIsValid[H <: Nat, T <: HList, L <: HList, S <: Nat](
+   implicit ev: HListProductZipped.Aux[H :: T, L],
+            sum: HListSum.Aux[L, S],
+            mod: Mod.Aux[S, _11, _0]
+            ): IsValidInductive[H :: T] = new IsValidInductive[H :: T] {}
+
 
 }
