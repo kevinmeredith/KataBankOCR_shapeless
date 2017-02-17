@@ -5,10 +5,10 @@ import ops.hlist.IsHCons
 import nat._
 import ops.nat.{Mod, Prod, Sum}
 
-trait IsValid[A]
-object IsValid {
+trait IsValidNonInductive[A]
+object IsValidNonInductive {
 
-  def apply[L <: HList](implicit ev: IsValid[L]) = ev
+  def apply[L <: HList](implicit ev: IsValidNonInductive[L]) = ev
 
   //  account number:  3  4  5  8  8  2  8  6  5
   //  position names:  d9 d8 d7 d6 d5 d4 d3 d2 d1
@@ -36,8 +36,8 @@ object IsValid {
     s7: Sum.Aux[P2, S6, S7],
     s8: Sum.Aux[P1, S7, S8],
     mod: Mod.Aux[S8, _11, _0]
-  ): IsValid[D9 :: D8 :: D7 :: D6 :: D5 :: D4 :: D3 :: D2 :: D1 :: HNil] = {
-    new IsValid[D9 :: D8 :: D7 :: D6 :: D5 :: D4 :: D3 :: D2 :: D1 :: HNil] {}
+  ): IsValidNonInductive[D9 :: D8 :: D7 :: D6 :: D5 :: D4 :: D3 :: D2 :: D1 :: HNil] = {
+    new IsValidNonInductive[D9 :: D8 :: D7 :: D6 :: D5 :: D4 :: D3 :: D2 :: D1 :: HNil] {}
   }
 
 

@@ -42,13 +42,19 @@ object HListProductZipped {
 
   def apply[L <: HList](implicit ev: HListProductZipped[L]): ev.type = ev
 
-  implicit def sumTimesLength3[A <: Nat, B <: Nat, C <: Nat, X <: Nat, Y <: Nat, Z <: Nat, O <: HList](
-    implicit prodA: Prod.Aux[A, _3, X],
-             prodB: Prod.Aux[B, _2, Y],
-             prodC: Prod.Aux[C, _1, Z]
+  implicit def hlistProduceZippedInductive[A <: Nat, B <: Nat, C <: Nat, D <: Nat, E <: Nat, F <: Nat, G <: Nat, H <: Nat, I <: Nat](
+    implicit prod9: Prod[A, _9],
+             prod8: Prod[B, _8],
+             prod7: Prod[C, _7],
+             prod6: Prod[D, _6],
+             prod5: Prod[E, _5],
+             prod4: Prod[F, _4],
+             prod3: Prod[G, _3],
+             prod2: Prod[H, _2],
+             prod1: Prod[I, _1]
   ) =
-    new HListProductZipped[A :: B :: C :: HNil] {
-      type Out = X :: Y :: Z :: HNil
+    new HListProductZipped[A :: B :: C :: D :: E :: F :: G :: H :: I :: HNil] {
+      type Out = prod9.Out :: prod8.Out :: prod7.Out :: prod6.Out :: prod5.Out :: prod4.Out :: prod3.Out :: prod2.Out :: prod1.Out :: HNil
     }
 }
 
@@ -76,8 +82,11 @@ object HListSum {
 trait IsValidInductive[L <: HList]
 object IsValidInductive {
 
-  // valid criterion:
-  // 3*d3 + 2*d2 + 1*d1 mod 11 == 0
+  //  account number:  3  4  5  8  8  2  8  6  5
+  //  position names:  d9 d8 d7 d6 d5 d4 d3 d2 d1
+  //
+  //  checksum calculation:
+  //    (d1+2*d2+3*d3 +..+9*d9) mod 11 = 0
   def apply[L <: HList](implicit ev: IsValidInductive[L]) = ev
 
   implicit def wholeIsValid[H <: Nat, T <: HList, L <: HList, S <: Nat](
