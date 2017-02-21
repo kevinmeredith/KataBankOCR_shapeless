@@ -42,7 +42,7 @@ object HListProductZipped {
 
   def apply[L <: HList](implicit ev: HListProductZipped[L]): ev.type = ev
 
-  implicit def hlistProduceZippedInductive[A <: Nat, B <: Nat, C <: Nat, D <: Nat, E <: Nat, F <: Nat, G <: Nat, H <: Nat, I <: Nat](
+  implicit def hlistProductZippedInductive[A <: Nat, B <: Nat, C <: Nat, D <: Nat, E <: Nat, F <: Nat, G <: Nat, H <: Nat, I <: Nat](
     implicit prod9: Prod[A, _9],
              prod8: Prod[B, _8],
              prod7: Prod[C, _7],
@@ -56,6 +56,17 @@ object HListProductZipped {
     new HListProductZipped[A :: B :: C :: D :: E :: F :: G :: H :: I :: HNil] {
       type Out = prod9.Out :: prod8.Out :: prod7.Out :: prod6.Out :: prod5.Out :: prod4.Out :: prod3.Out :: prod2.Out :: prod1.Out :: HNil
     }
+
+//
+//  implicit def hlistProduceZippedInductive[A <: Nat, B <: Nat, C <: Nat, D <: Nat, E <: Nat, F <: Nat, G <: Nat, H <: Nat, I <: Nat](
+//    implicit prod9: Prod[A, _9],
+//             ev: HListProductZipped[B :: C :: D :: E :: F :: G :: H :: I :: HNil]
+//  ) =
+//    new HListProductZipped[A :: B :: C :: D :: E :: F :: G :: H :: I :: HNil] {
+//      type Out = prod9.Out :: ev.Out
+//    }
+
+
 }
 
 trait HListSum[L <: HList] {
@@ -67,10 +78,16 @@ object HListSum {
 
   def apply[L <: HList](implicit ev: HListSum[L]): Aux[L, ev.Out] = ev
 
-  implicit def hListSumInductive[H <: Nat, L <: HList, S <: Nat, T <: Nat](
+//  implicit def hListSumInductive[H <: Nat, L <: HList, T <: Nat](
+//    implicit rest: HListSum.Aux[L, T],
+//             all: Sum[H, T]): HListSum.Aux[H :: L, all.Out] = new HListSum[H :: L] {
+//    type Out = all.Out
+//  }
+
+  implicit def hListSumInductive[H <: Nat, L <: HList, T <: Nat](
     implicit rest: HListSum.Aux[L, T],
-             all: Sum.Aux[H, T, S]): HListSum.Aux[H :: L, S] = new HListSum[H :: L] {
-    type Out = S
+    all: Sum[H, T]): HListSum.Aux[H :: L, all.Out] = new HListSum[H :: L] {
+    type Out = all.Out
   }
 
   implicit val hlistSumHNil: HListSum.Aux[HNil, _0] = new HListSum[HNil] {
