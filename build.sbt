@@ -1,6 +1,6 @@
 scalaVersion := "2.12.1"
 
 libraryDependencies ++= Seq(
-  "com.chuusai" %% "shapeless" % "2.3.2"
+  "com.chuusai" %% "shapeless" % "2.3.3-SNAPSHOT"
 )
 
