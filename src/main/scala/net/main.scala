@@ -40,9 +40,9 @@ object HListSum {
 
   def apply[L <: HList](implicit ev: HListSum[L]): Aux[L, ev.Out] = ev
 
-  implicit def hListSumInductive[H <: Nat, L <: HList, S <: Nat](
+  implicit def hListSumInductive[H <: Nat, L <: HList, S <: Nat, TS <: Nat](
     implicit rest: HListSum.Aux[L, S],
-             sum: Sum[H, S]): HListSum.Aux[H :: L, sum.Out] = new HListSum[H :: L] {
+             sum: Sum.Aux[H, S, TS]): HListSum.Aux[H :: L, TS] = new HListSum[H :: L] {
     type Out = sum.Out
   }
 
@@ -62,10 +62,10 @@ object IsValidInductive {
   def apply[L <: HList](implicit ev: IsValidInductive[L]) = ev
 
   implicit def wholeIsValid[H <: Nat, T <: HList, L <: HList, S <: Nat](
-   implicit ev: HListProductZipped.Aux[H :: T, L],
+   implicit length: Length.Aux[H :: T, _9],
+            ev: HListProductZipped.Aux[H :: T, L],
             sum: HListSum.Aux[L, S],
-            mod: Mod.Aux[S, _11, _0],
-            length: Length.Aux[H :: T, _9]
+            mod: Mod.Aux[S, _11, _0]
             ): IsValidInductive[H :: T] = new IsValidInductive[H :: T] {}
 
 }
