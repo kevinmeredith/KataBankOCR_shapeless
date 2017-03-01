@@ -41,7 +41,7 @@ object HasCheckSum {
 
 trait FinalValid[L <: HList]
 object FinalValid {
-  def apply[L <: HList](implicit ev: SumOfMods[L]) = ev
+  def apply[L <: HList](implicit ev: FinalValid[L]) = ev
 
   implicit def finalValidEv[L <: HList](
   	implicit nine:     Length.Aux[L, _9], 
